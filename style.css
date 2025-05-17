@@ -14,18 +14,17 @@ body {
 
 #initial-screen {
   background-image: url('Images/AllHeroes.png');
-  background-size: cover;
+  background-size: 375px 667px;
   background-repeat: no-repeat;
-  background-position: center;
-  height: 100vh;
-  width: 100vw;
+  background-position: center center;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   color: white;
   text-shadow: 2px 2px 4px black;
 }
-
 
 #top-text {
   margin-top: 20px;
@@ -51,14 +50,14 @@ body {
 }
 
 #warning-box {
-  background-image: url('Images/AllHeroes.png');
   display: flex;
   flex-direction: column;
-  background-size: cover;
+  background-image: url('Images/AllHeroes.png');
+  background-size: 375px 667px;
   background-repeat: no-repeat;
-  background-position: center;
-  height: 100vh;
-  width: 100vh;
+  background-position: center center;
+  height: 100%;
+  width: 100%;
   position: relative;
 }
 
@@ -87,12 +86,11 @@ body {
 }
 
 #button-container {
-  position: absolute;
-  bottom: 20px;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
 }
 
 .button {
@@ -161,15 +159,12 @@ body {
   flex-direction: column;
 }
 
-#bottom-section p {
-  text-align: center;
-  font-size: 16px;
-  color: white;
-}
-
 #top-section {
   height: 50%;
   width: 100%;
+  background-size: 375px 667px;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 #bottom-section {
@@ -177,12 +172,29 @@ body {
   background: black;
   color: white;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
-#bottom-section p {
+#bottom-section > p {
   font-size: 1.5em;
+  margin: 0;
+  text-align: center;
+}
+
+#bottom-section-p {
+  margin-top: 10px;
+  width: 90%;
+}
+
+#bottom-section-p p {
+  text-align: center;
+  font-size: 16px;
+  color: white;
   margin: 0;
 }
 
@@ -192,29 +204,8 @@ body {
   background: black;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-}
-
-#instruction-box {
-  top: 100px;
-  width: 80%;
-  height: 75%;
-  background: white;
-  border: 3px solid blue;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  box-sizing: border-box;
-}
-
-#instruction-box p {
-  color: black;
-  font-size: 1em;
-  text-align: center;
-  margin: 0;
 }
 
 #tutorial-step2-page {
@@ -223,7 +214,56 @@ body {
   background: black;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#instruction-box {
+  margin-top: 20px;
+  width: 80%;
+  height: 70%;
+  background: white;
+  border: 3px solid blue;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  box-sizing: border-box;
+  text-align: center;
+  overflow-y: auto;
+}
+
+#instruction-box p {
+  color: black;
+  font-size: 1em;
+  margin: 10px 0;
+}
+
+#instruction-box ul {
+  color: black;
+  font-size: 1em;
+  margin: 10px 0;
+  padding: 0;
+  list-style-type: none;
+  width: 100%;
+}
+
+#instruction-box li {
+  color: black;
+  font-size: 1em;
+  margin: 5px 0;
+  padding: 5px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+#button-container {
+  width: 80%;
+  margin: 10px auto 0;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
