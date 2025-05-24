@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial Step 1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="tutorial-step1-page">
+    <div id="instruction-box">
+      <p>Welcome to the tutorial!</p>
+      <p>In this game, you will act as a content moderator for a social media platform.</p>
+    </div>
+  </div>
+  <div id="policy-popup" style="display: none;">
+    <div id="policy-message">
+      <p>You can consult the policies by clicking on the “i” button.</p>
+      <p>The time will not stop when you are reviewing the policies.</p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('tutorial-step1-page').addEventListener('click', () => {
+      window.location.href = 'tutorial-step2.html';
+    });
+
+    document.getElementById('info-button').addEventListener('click', () => {
+      const popup = document.getElementById('policy-popup');
+      popup.style.display = 'flex';
+    });
+
+    document.getElementById('policy-popup').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('policy-popup')) {
+        document.getElementById('policy-popup').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

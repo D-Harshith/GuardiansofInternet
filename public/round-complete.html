@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Round Complete</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="round-complete-page">
+    <div id="completion-content"></div>
+  </div>
+  <script>
+    // Parse the round number from the URL query string
+    const urlParams = new URLSearchParams(window.location.search);
+    let round = parseInt(urlParams.get('round')) || 1; // Default to 1 if not provided
+
+    // Define hero images for each round
+    const heroImages = ['Hero2.png', 'Hero3.png', 'Hero4.png', 'Hero5.png', 'Hero6.png', 'Hero7.png'];
+
+    // Define texts for each round
+    const roundTexts = [
+      "ROUND 1 COMPLETED", // Initial round 1 text
+      "Ready to help shape a healthy online community for all?", // Before round 2
+      "Can we count on you to protect the Internet?", // Before round 3
+      "Are you ready to support an online space that works for everyone?", // Before round 4
+      "Ready to support a fair digital world?", // Before round 5
+      "Ready to foster a balanced Internet?" // Before round 6
+    ];
+
+    // Set initial completion screen
+    const completionContent = document.getElementById('completion-content');
+    completionContent.innerHTML = `
+      <div style="height: 70%; margin-top: 50px; display: flex; justify-content: center; align-items: center;">
+        <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+      </div>
+      <div style="height: 30%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h1>ROUND ${round} COMPLETED</h1>
+      </div>
+    `;
+
+    // Transition after 3 seconds
+    setTimeout(() => {
+      if (round < 6) {
+        completionContent.innerHTML = `
+          <div style="height: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h1>${roundTexts[round]}</h1>
+          </div>
+          <div style="height: 70%; display: flex; justify-content: center; align-items: center;">
+            <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+          </div>
+          <div style="height: 10%; display: flex; justify-content: center; align-items: center;">
+            <button id="next-round" class="button" style="background-color: orange; margin-top: 10px;">Next Round</button>
+          </div>
+        `;
+        document.getElementById('next-round').addEventListener('click', () => {
+          window.location.href = `round-start.html?round=${round + 1}`;
+        });
+      } else {
+        completionContent.innerHTML = `
+          <div style="height: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h1>Thank you for playing the game, your responses are recorded</h1>
+          </div>
+          <div style="height: 70%; display: flex; justify-content: center; align-items: center;">
+            <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+          </div>
+          <div style="height: 10%;"></div>
+        `;
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

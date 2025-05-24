@@ -1,0 +1,531 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  width: 375px;
+  height: 667px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+#initial-screen, #round-start-page, #game-page, #round-complete-page, #policy-page {
+  background: black;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+#top-text {
+  margin-top: 20px;
+  text-align: center;
+  padding: 5px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  background: black;
+  border-radius: 10px;
+}
+
+#top-text h1 {
+  font-size: 1.5em;
+  margin: 0;
+  color: white;
+}
+
+#top-text p {
+  font-size: 1em;
+  margin: 5px 0 0 0;
+  color: white;
+}
+
+#warning-box {
+  display: flex;
+  flex-direction: column;
+  background-image: url('Images/AllHeroes.png');
+  background-size: 375px 667px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+#warning-content {
+  width: 75%;
+  background: black;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+#warning-content b {
+  font-size: 20px;
+}
+
+#warning-content p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+#button-container {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  top: calc(70% + 60px); /* Positioned directly below #instruction-box (70% height + 50px margin-top + 10px buffer) */
+}
+
+#button-container-index2 {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 20px;
+}
+
+.button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: blue;
+  color: white;
+}
+
+#play-tutorial { background-color: red; }
+#skip-tutorial { background-color: blue; }
+#about { background-color: skyblue; }
+#next-round { background-color: green; }
+
+#about-page {
+  background: black;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: white;
+  text-align: center;
+}
+
+#about-title {
+  margin-top: 20px;
+  background: black;
+  padding: 10px;
+  border-radius: 10px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#about-title h1 {
+  font-size: 1.5em;
+  margin: 0;
+}
+
+#about-content {
+  margin-top: 20px;
+  background: black;
+  padding: 15px;
+  border-radius: 10px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#about-content p {
+  font-size: 1em;
+  margin: 0;
+}
+
+#about-content a {
+  color: skyblue;
+  text-decoration: none;
+}
+
+#tutorial-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-image: url('Images/AllHeroes.png');
+  background-size: 375px 667px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+#round-start-page {
+  height: 100%;
+  width: 100%;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#game-page {
+  height: 100%;
+  width: 100%;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+#round-complete-page {
+  height: 100%;
+  width: 100%;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+#top-section {
+  height: 100%;
+  width: 100%;
+}
+
+#bottom-section {
+  height: 100%;
+  background: black;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  padding: 15px;
+  box-sizing: border-box;
+  min-height: 0;
+}
+
+#bottom-section > p {
+  font-size: 1.5em;
+  margin: 0;
+  text-align: center;
+}
+
+#bottom-section-p {
+  margin-top: 10px;
+  width: 90%;
+}
+
+#bottom-section-p p {
+  text-align: center;
+  font-size: 16px;
+  color: white;
+  margin: 0;
+}
+
+/* Tutorial and Policy Page Styles */
+#tutorial-step1-page, #tutorial-step2-page, #tutorial-step3-page, #tutorial-step4-page,
+#tutorial-step5-page, #tutorial-step6-page, #tutorial-step7-page, #tutorial-step8-page,
+#tutorial-step9-page, #policy-page {
+  height: 100%;
+  width: 100%;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+#instruction-box {
+  margin-top: 50px;
+  width: 80%;
+  height: 70%;
+  background: white;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  box-sizing: border-box;
+  text-align: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#instruction-box p {
+  color: black;
+  font-size: 1em;
+  margin: 10px 0;
+}
+
+#instruction-box ul {
+  color: black;
+  font-size: 1em;
+  margin: 10px 0;
+  padding-left: 0;
+  text-wrap: wrap;
+  width: 100%;
+  margin-right: 0;
+  margin-top: 5px;
+  left: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#instruction-box li {
+  color: black;
+  font-size: 1em;
+  margin: 5px 0;
+  padding: 5px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.circle-button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  color: white;
+}
+
+.circle-button-small {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+  color: white;
+}
+
+#allow {
+  background-color: green;
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+}
+
+#not-allow {
+  background-color: red;
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
+}
+
+#info-button {
+  background-color: darkblue;
+}
+
+#action-buttons {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+}
+
+#action-buttons .circle-button {
+  margin: 0 20px;
+}
+
+#policy-message {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: black;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+#policy-popup {
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 70%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#policy-popup #policy-message {
+  position: relative;
+  background: white;
+  border: 3px solid blue;
+  border-radius: 10px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#card-indicator {
+  position: absolute;
+  top: 19px;
+  left: 42px;
+  text-align: left;
+  color: white;
+  width: auto;
+}
+
+#card-count {
+  left: 20px;
+  background-color: gold;
+  color: white;
+  font-size: 1em;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-bottom: 5px;
+  width: 40px;
+  text-align: center;
+}
+
+#timer-bar-container {
+  width: 80%;
+  height: 10px;
+  background-color: grey;
+  position: absolute;
+  top: 0;
+  left: 42px;
+  border-radius: 5px;
+  display: block;
+}
+
+#timer-bar {
+  width: 100%;
+  height: 100%;
+  background-color: gold;
+  border-radius: 5px;
+  transition: width 0.1s linear;
+}
+
+#game-page #timer-bar {
+  background-color: gold;
+}
+
+#click-message {
+  width: 80%;
+  text-align: center;
+  color: white;
+  margin: 10px auto;
+}
+
+#click-message p {
+  margin: 5px 0;
+  font-size: 1em;
+}
+
+#timer-message {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  text-align: left;
+  color: white;
+  width: 80%;
+  display: none;
+}
+
+#timer-message p {
+  margin: 5px 0;
+  font-size: 1em;
+  width: 100%;
+}
+
+#tutorial-step3-page #card-indicator {
+  top: 19px;
+  left: 42px;
+}
+
+#timer-bar-container {
+  top: 7px;
+}
+
+#completion-content h1 {
+  color: white;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+#round-text h1 {
+  color: white;
+  font-size: 2em;
+  text-align: center;
+}
+
+#round-start-page #round-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#round-complete-page #completion-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  #top-text, #warning-content, #about-content, #instruction-box {
+    width: 90%;
+    font-size: 0.9em;
+  }
+
+  .button, .circle-button {
+    font-size: 0.9em;
+    padding: 10px 15px;
+  }
+
+  #top-text h1 {
+    font-size: 1.2em;
+  }
+
+  #top-text p, #warning-content p, #instruction-box p {
+    font-size: 0.95em;
+  }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial Step 3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="tutorial-step3-page">
+    <div id="card-indicator">
+      <div id="card-count">2</div>
+    </div>
+    <div id="instruction-box">
+      <p>Keep an eye on the queue shown on the top right. We do not want it to accumulate.</p>
+    </div>
+    <div id="button-container">
+      <button id="info-button" class="circle-button-small">i</button>
+    </div>
+    <div id="action-buttons">
+      <button id="not-allow" class="circle-button">Not Allow</button>
+      <button id="allow" class="circle-button">Allow</button>
+    </div>
+    
+  
+  <div id="policy-popup" style="display: none;">
+    <div id="policy-message">
+      <p>You can consult the policies by clicking on the “i” button.</p>
+      <p>The time will not stop when you are reviewing the policies.</p>
+    </div>
+  </div>
+  </div>
+  <script>
+    let hasClickedButton = false;
+
+    const clickMessage = document.getElementById('click-message');
+
+    document.getElementById('not-allow').addEventListener('click', () => {
+      window.location.href = 'tutorial-step4.html';
+    });
+
+    document.getElementById('allow').addEventListener('click', () => {
+      window.location.href = 'tutorial-step4.html';
+    });
+
+    document.getElementById('info-button').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const popup = document.getElementById('policy-popup');
+      if (popup) {
+        popup.style.display = 'flex';
+      }
+    });
+
+    document.getElementById('tutorial-step3-page').addEventListener('click', (e) => {
+      const popup = document.getElementById('policy-popup');
+      if (popup && popup.style.display === 'flex') {
+        popup.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

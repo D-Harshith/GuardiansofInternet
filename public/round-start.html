@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Round Start</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="round-start-page">
+    <div id="round-content"></div>
+  </div>
+  <script>
+    // Parse the round number from the URL query string
+    const urlParams = new URLSearchParams(window.location.search);
+    let round = parseInt(urlParams.get('round')) || 1; // Default to 1 if not provided
+
+    // Define hero images and texts for each round
+    const heroImages = ['Hero2.png', 'Hero3.png', 'Hero4.png', 'Hero5.png', 'Hero6.png', 'Hero7.png'];
+    const roundTexts = [
+      "", // No pre-round text for Round 1
+      "Ready to help shape a healthy online community for all?",
+      "Can we count on you to protect the Internet?",
+      "Are you ready to support an online space that works for everyone?",
+      "Ready to support a fair digital world?",
+      "Ready to foster a balanced Internet?"
+    ];
+
+    // Set initial content (pre-round text with hero image)
+    const roundContent = document.getElementById('round-content');
+    let contentHtml = '';
+    if (round === 1) {
+      // Skip pre-round text for Round 1, go straight to "ROUND 1"
+      contentHtml = `
+        <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
+          <h1 style="color: white;">ROUND ${round}</h1>
+        </div>
+        <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
+          <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+        </div>
+      `;
+    } else {
+      // Show pre-round text for Rounds 2-6
+      contentHtml = `
+        <div style="height: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <h1>${roundTexts[round]}</h1>
+        </div>
+        <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
+          <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+        </div>
+      `;
+    }
+    roundContent.innerHTML = contentHtml;
+
+    // After 2 seconds, transition to "ROUND X" screen (except for Round 1, which is already there)
+    setTimeout(() => {
+      if (round !== 1) {
+        roundContent.innerHTML = `
+          <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
+            <h1 style="color: white;">ROUND ${round}</h1>
+          </div>
+          <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
+            <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+          </div>
+        `;
+      }
+      // After another 2 seconds, start the game
+      setTimeout(() => {
+        window.location.href = `game.html?round=${round}`;
+      }, 2000);
+    }, round === 1 ? 0 : 2000);
+  </script>
+</body>
+</html>

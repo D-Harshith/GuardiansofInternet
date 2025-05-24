@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Policy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="policy-page">
+     <p style="position: absolute; left: 42px; right: 42px; color: white; text-align: left; font-size: 14px;">Please take a few minutes to review the policy:</p>
+   
+    <div id="instruction-box" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+      <p><b>POLICY</b></p>
+      <p><b>Hate speech:</b> Content that attacks people on the basis of their protected characteristics</p>
+      <p><i>Tap the screen to continue</i></p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('policy-page').addEventListener('click', () => {
+      window.location.href = 'tutorial-step8.html';
+    });
+  </script>
+</body>
+</html>

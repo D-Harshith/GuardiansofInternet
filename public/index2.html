@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Initial Screen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="initial-screen">
+    <div id="top-text">
+      <h1>Welcome</h1>
+      <p>Prepare to moderate content!</p>
+    </div>
+    <div id="warning-box">
+      <div id="warning-content">
+        <b>Warning:</b>
+        <p>This game contains content that some users may find disturbing.</p>
+      </div>
+    </div>
+    <div id="button-container-index2">
+      <button id="play-tutorial" class="button">Play Tutorial</button>
+      <button id="skip-tutorial" class="button">Skip Tutorial</button>
+      <button id="about" class="button">About</button>
+    </div>
+  </div>
+  <script>
+    document.getElementById('play-tutorial').addEventListener('click', () => {
+      window.location.href = 'tutorial-step1.html';
+    });
+
+    document.getElementById('skip-tutorial').addEventListener('click', () => {
+      window.location.href = 'round-start.html';
+    });
+
+    document.getElementById('about').addEventListener('click', () => {
+      window.location.href = 'about.html';
+    });
+  </script>
+</body>
+</html>

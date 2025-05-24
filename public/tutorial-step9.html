@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial Step 9</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="tutorial-step9-page">
+    <div id="timer-bar-container">
+      <div id="timer-bar"></div>
+    </div>
+    <div id="card-indicator">
+      <div id="card-count">0</div>
+    </div>
+    <div id="instruction-box">
+      <p>We are counting on you!</p>
+      <p>If you do a great job, you can earn the badge of Guardian of the Internet.</p>
+      <button id="start-game" class="button">Start Game</button>
+    </div>
+    <div id="button-container">
+      <button id="info-button" class="circle-button-small">i</button>
+    </div>
+    <div id="action-buttons">
+      <button id="not-allow" class="circle-button">Not Allow</button>
+      <button id="allow" class="circle-button">Allow</button>
+    </div>
+
+  <div id="policy-popup" style="display: none;">
+    <div id="policy-message">
+      <p><b>Hate speech:</b> Content that attacks people on the basis of their protected characteristics</p>
+    </div>
+  </div>
+  </div>
+  <script>
+    document.getElementById('not-allow').addEventListener('click', () => {
+      // Placeholder for future navigation
+    });
+
+    document.getElementById('allow').addEventListener('click', () => {
+      // Placeholder for future navigation
+    });
+
+  document.getElementById('info-button').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const popup = document.getElementById('policy-popup');
+      if (popup) {
+        popup.style.display = 'flex';
+      }
+    });
+
+
+    document.getElementById('tutorial-step9-page').addEventListener('click', (e) => {
+      const popup = document.getElementById('policy-popup');
+      if (popup && popup.style.display === 'flex') {
+        popup.style.display = 'none';
+      }
+    });
+
+    document.getElementById('start-game').addEventListener('click', () => {
+      window.location.href = 'round-start.html';
+    });
+  </script>
+</body>
+</html>
