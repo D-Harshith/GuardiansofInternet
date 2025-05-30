@@ -15,10 +15,11 @@
       <div id="card-count">1</div>
     </div>
     <div id="instruction-box">
-      <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
-        <p>Stop the refugee filth from coming into our country.</p>
+      <div class="content-container">
+        <p class="example-content">
+          Stop the refugee filth from coming into our country.</p>
       </div>
-      <div style="height: 50%;">
+      <div class="instruction-container">
         <p></p>
       </div>
     </div>
@@ -30,41 +31,42 @@
       <button id="allow" class="circle-button">Allow</button>
     </div>
   
-  <div id="policy-popup" style="display: none;">
-    <div id="policy-message">
-      <p>You can consult the policies by clicking on the “i” button.</p>
-      <p>The time will not stop when you are reviewing the policies.</p>
+    <div id="policy-popup" style="display: none;">
+      <div id="policy-message">
+        <p>You can consult the policies by clicking on the “i” button.</p>
+        <p>The time will not stop when you are reviewing the policies.</p>
+      </div>
     </div>
-  </div>
   </div>
   <script>
     document.getElementById('allow').addEventListener('click', () => {
       const instructionBox = document.getElementById('instruction-box');
       instructionBox.innerHTML = `
-         <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
-          <p>Stop the refugee filth from coming into our country.</p>
+        <div class="content-container">
+          <p class="example-content">Stop the refugee filth from coming into our country.</p>
         </div>
-        <div style="height: 50%;">
-          <p><i>Stop the refugee filth from coming into our country. This content should not be allowed because it is attacking people on the basis of their protected characteristics.</i></p>
+        <div class="instruction-container">
+          <p><i>This content should not be allowed because it is attacking people on the basis of their protected characteristics.</i></p>
           <p><i>Press the red “not allow” button below.</i></p>
         </div>
       `;
     });
-        document.getElementById('not-allow').addEventListener('click', () => {
+    document.getElementById('not-allow').addEventListener('click', () => {
       const instructionBox = document.getElementById('instruction-box');
       instructionBox.innerHTML = `
-         <div style="height: 50%; display: flex; justify-content: center; align-items: center;">
-          <p>Stop the refugee filth from coming into our country.</p>
+        <div class="content-container">
+          <p class="example-content">Stop the refugee filth from coming into our country.</p>
         </div>
-        <div style="height: 50%;">
-          <p><i>You are correct. This content should not be allowed because it is attacking a group of people on the basis of their protected characteristics.</p>
+        <div class="instruction-container">
+          <p><i>You are correct. This content should not be allowed because it is attacking a group of people on the basis of their protected characteristics.</i></p>
         </div>
-      `;setTimeout(() => {
+      `;
+      setTimeout(() => {
         window.location.href = 'tutorial-step7.html';
       }, 3000); // 3-second delay
     });
 
-     document.getElementById('info-button').addEventListener('click', (e) => {
+    document.getElementById('info-button').addEventListener('click', (e) => {
       e.stopPropagation();
       const popup = document.getElementById('policy-popup');
       if (popup) {

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial Step 2i</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #highlighted-info-button {
+      background-color: darkblue;
+      position: relative;
+    }
+    #highlighted-info-button::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 2px solid white;
+      border-radius: 50%;
+      top: -6px;
+      left: -6px;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div id="tutorial-step2-page">
+    
+    <div id="instruction-box">
+      <div class="content-container">
+        <p class="example-content"></p>
+      </div>
+      <div class="instruction-container" 
+      style="display: flex; justify-content: center; 
+      align-items: center; height: 450vh;">
+        <p>You can consult the policies by clicking on the “i” button.</p>
+        <p>The time will not stop when you are reviewing the policies.</p>
+      </div>
+    </div>
+    <div id="button-container">
+      <button id="highlighted-info-button" class="circle-button-small">i</button>
+    </div>
+    <div id="action-buttons">
+      <button id="not-allow" class="circle-button">Not Allow</button>
+      <button id="allow" class="circle-button">Allow</button>
+    </div>
+  </div>
+  <script>
+    document.getElementById('allow').addEventListener('click', () => {
+      window.location.href = 'tutorial-step3.html';
+    });
+    document.getElementById('not-allow').addEventListener('click', () => {
+      // No action for "Not Allow" to encourage progression
+    });
+    document.getElementById('highlighted-info-button').addEventListener('click', (e) => {
+      e.stopPropagation();
+      // No popup action, just highlight as static info
+    });
+    document.getElementById('tutorial-step6-page').addEventListener('click', (e) => {
+      // No popup to close, so this can be empty
+    });
+  </script>
+</body>
+</html>

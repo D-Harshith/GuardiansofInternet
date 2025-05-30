@@ -31,17 +31,144 @@
     </div>
   </div>
   <script>
-    let userCode = 'USER_' + Math.random().toString(36).substr(2, 9);
+    // Persist userCode across rounds using localStorage
+    let userCode = localStorage.getItem('userCode');
+    if (!userCode) {
+      userCode = 'USER_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('userCode', userCode);
+    }
     let round = parseInt(new URLSearchParams(window.location.search).get('round')) || 1;
     let cardIndex = 0;
     let cardsLeft = 20;
     let timeLeft = 60;
     let startTime = null;
-    let cards = Array.from({ length: 120 }, (_, i) => `Comment ${i + 1}`);
+    let cards = [
+      "Anti-homosexuality.",
+      "I hate Christianity.",
+      "Migrants should not be allowed into the country.",
+      "Deport the migrants.",
+      "Build a fence in Macedonia to keep the migrants out.",
+      "Asylum seekers out.",
+      "Islam is a religion of hate. Close the borders to immigrating Muslims until we figure out what is going on.",
+      "Mexican immigrants are freeloaders mooching off of tax dollars we don’t even have.",
+      "Immigrants just mooch off the state, that's why we need to keep them out.",
+      "Migrants are lazy and just want to come here to feed off our social welfare benefits.",
+      "Migrants are so filthy.",
+      "Migrants are thieves and robbers.",
+      "You are such a Jew.",
+      "He’s gay.",
+      "French are the best.",
+      "Keep the horny migrant teenagers away from our daughters.",
+      "Muslim migrants ought to be killed.",
+      "Kill fat people.",
+      "Polish immigrants should be excluded.",
+      "I hate American politicians.",
+      "Fuck immigrants.",
+      "Using my freedom of speech to inform that I find homosexuals DISGUSTING!",
+      "I fuckin hate Christians.",
+      "The Sikhs who come to this country are filthy cows.",
+      "Migrants are scum.",
+      "The migrant rats have arrived in Berlin.",
+      "Migrants are filthy cockroaches that will infect our country.",
+      "Refugees? They’re all rape-fugees!",
+      "Refugees are state-financed child molesters.",
+      "Stop the refugee filth from coming into our country.",
+      "I call upon the government to either sterilize the migrants or else keep them out to preserve our racial purity.",
+      "I call upon the government to mandate all gay immigrants have a chip implanted so law enforcement track them.",
+      "Irish are the best, but really French sucks.",
+      "Typical narcissistic male you reek of misogyny.",
+      "Women should die.",
+      "Men are trash.",
+      "Trannies are a disease.",
+      "Koreans are scum of the earth.",
+      "Men are pigs.",
+      "Hutus are cockroaches.",
+      "Iraqi women are cows.",
+      "Muslims have sex with goats.",
+      "Jews are vermin.",
+      "Black people are monkeys.",
+      "Men are the less evolved sex.",
+      "Intersex are freaks.",
+      "White devils.",
+      "Native savages.",
+      "Nothing to see here, just the shoes of people waiting to vote at Dachau death camp.",
+      "Girl are ugly.",
+      "Trans women are hideous.",
+      "Jews are deformed.",
+      "Boys are so dumb.",
+      "All gay people are mentally ill.",
+      "Hondurans have low IQ.",
+      "Dating black women will ruin your life.",
+      "Brown people are thieves.",
+      "Never trust a Jew.",
+      "Ew, girls are gross.",
+      "Bengalis are vile.",
+      "Jews are disgusting.",
+      "I don’t like men.",
+      "This thread is full of femcel takes.",
+      "I’m racist and proud.",
+      "Women are bitches.",
+      "Asshole Asians.",
+      "#fuckthegays",
+      "Women drivers should stay the fuck off the road.",
+      "I don’t want Ethiopians in our pool.",
+      "You towelhead.",
+      "Look at the tranny.",
+      "Faggots can’t force me to do anything.",
+      "I have Muslims.",
+      "Stop the mexicans migrants from coming to this country! #BuildTheWall",
+      "Let’s kill jews and kill them for fun. #KillJews",
+      "Throw all those migrant babies across the border!",
+      "Rich people are the best, but really poor people suck.",
+      "Using my freedom of speech to inform that I find Palestines DISGUSTING!",
+      "The migrant rats have arrived in Paris.",
+      "Did Nazi concentration camps really exist? C'mon!",
+      "Genocide is happening in Gaza!",
+      "Rich people are the worst.",
+      "Russian women are mail-order bride scum.",
+      "People with disabilities are subhuman and shouldn’t be see in public.",
+      "People with COVID are like rats contaminating everyone around them.",
+      "Mormons should be punished.",
+      "I don't like men.",
+      "I don't like women.",
+      "Why can't I say the Nword?",
+      "All smokers should die.",
+      "You really thought that was a good take? Lmao you're actual poop",
+      "The person is this video is dumb.",
+      "Fuck.",
+      "Bitch.",
+      "Omg this Karen really called the cops because kids were playing music?",
+      "She’s out here saying ‘I’m not like other girls’... classic pick-me behavior.",
+      "Bro just repeats whatever the news says. Full-on NPC.",
+      "Here come the alphabet mafia trying to cancel jokes again.",
+      "Imagine still using Facebook unironically in 2025. OK boomer.",
+      "Landwhale energy.",
+      "She said she’s an IG model but girl is built like a fridge.",
+      "Wait that’s a dude?? That’s a clean trap damn.",
+      "She’s got the body but her face... total butterface situation.",
+      "This party looks mad ghetto, not showing up.",
+      "Figures, another thug looting a store. Typical.",
+      "Ching chong.",
+      "Why are we giving benefits to illegals when our own people are struggling?",
+      "This mayo monkey really said seasoning is ‘too spicy’.",
+      "Another snow roach opinion I didn’t ask for.",
+      "You are schizo.",
+      "Ultimate cringe.",
+      "You are retarded.",
+      "L + ratio + cope + seethe + mald. Cry more.",
+      "This post screams femcel energy tbh.",
+      "Let me guess... 5'6 incel mad at women again?",
+      "This soyboy probably apologizes when his girl cheats.",
+      "Dude’s a cuck and proud of it apparently.",
+      "You are such a welfare queen.",
+      "You are so cringe. Bless your heart.",
+      "Cringeeeee."
+    ];
     let shuffledCards = [];
     let decisions = [];
     let policyChecks = [];
     let timerInterval;
+    let roundCompleted = false;
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -52,25 +179,33 @@
     }
 
     function startRound() {
+      if (roundCompleted) return;
       shuffledCards = shuffle(cards.filter(card => !decisions.some(d => d.card === card))).slice(0, 20);
       cardIndex = 0;
       cardsLeft = 20;
       timeLeft = 60;
       document.getElementById('card-count').textContent = cardsLeft;
       document.getElementById('card-content').textContent = shuffledCards[cardIndex] || 'No more cards';
+      document.getElementById('timer-bar').style.width = '100%';
       startTime = Date.now();
       timerInterval = setInterval(updateTimer, 1000);
+      roundCompleted = false;
     }
 
     function updateTimer() {
-      timeLeft--;
-      document.getElementById('timer-bar').style.width = (timeLeft / 60 * 100) + '%';
-      if (timeLeft <= 0 || cardIndex >= 20) {
+      if (!roundCompleted && timeLeft > 0 && cardIndex < 20) {
+        timeLeft--;
+        document.getElementById('timer-bar').style.width = (timeLeft / 60 * 100) + '%';
+      }
+      if ((timeLeft <= 0 || cardIndex >= 20) && !roundCompleted) {
         clearInterval(timerInterval);
+        roundCompleted = true;
         saveResponses().then(() => {
-          console.log('Redirecting after save');
-          window.location.href = `round-complete.html?round=${round}${round >= 6 ? '&end=true' : ''}`;
-        }).catch(error => console.error('Save error before redirect:', error));
+          const nextRound = round + 1;
+          window.location.href = `round-complete.html?round=${round}${nextRound > 6 ? '&end=true' : ''}`;
+        }).catch(error => {
+          console.error('Save error before redirect:', error);
+        });
       }
     }
 
@@ -82,27 +217,32 @@
         ipAddress: '127.0.0.1',
         browser: navigator.userAgent,
         device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        round
       };
 
-      console.log('Attempting to save response:', userResponse);
+      console.log('Preparing to send:', userResponse);
       try {
         const response = await fetch('http://localhost:3000/save-response', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userResponse)
         });
-        console.log('Fetch response status:', response.status);
+        console.log('Fetch response status:', response.status, response.statusText);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        console.log('Server response data:', data);
+        console.log('Server response:', data);
+        // Clear decisions and policyChecks for the next round
+        decisions = [];
+        policyChecks = [];
       } catch (error) {
-        console.error('Fetch error details:', error);
-        throw error; // Re-throw to handle in the calling function
+        console.error('Fetch error:', error.message);
+        throw error;
       }
     }
 
     function recordDecision(decision) {
+      if (cardIndex >= 20 || roundCompleted) return;
       const endTime = Date.now();
       const timeSpent = (endTime - startTime) / 1000;
       decisions.push({
@@ -113,16 +253,19 @@
       });
       cardIndex++;
       cardsLeft--;
-      document.getElementById('card-count').textContent = cardsLeft;
+      document.getElementById('card-count').textContent = Math.max(0, cardsLeft);
       if (cardIndex < 20 && timeLeft > 0) {
         document.getElementById('card-content').textContent = shuffledCards[cardIndex];
         startTime = Date.now();
       } else {
         clearInterval(timerInterval);
+        roundCompleted = true;
         saveResponses().then(() => {
-          console.log('Redirecting after decision save');
-          window.location.href = `round-complete.html?round=${round}${round >= 6 ? '&end=true' : ''}`;
-        }).catch(error => console.error('Save error after decision:', error));
+          const nextRound = round + 1;
+          window.location.href = `round-complete.html?round=${round}${nextRound > 6 ? '&end=true' : ''}`;
+        }).catch(error => {
+          console.error('Save error after decision:', error);
+        });
       }
     }
 
@@ -131,7 +274,7 @@
 
     document.getElementById('info-button').addEventListener('click', () => {
       const popup = document.getElementById('policy-popup');
-      if (popup.style.display === 'none') {
+      if (popup.style.display === 'none' && !roundCompleted) {
         clearInterval(timerInterval);
         popup.style.display = 'flex';
         policyChecks.push({ card: shuffledCards[cardIndex], round, time: Date.now() });
@@ -144,7 +287,7 @@
 
     document.getElementById('game-page').addEventListener('click', (e) => {
       const popup = document.getElementById('policy-popup');
-      if (popup.style.display === 'flex' && e.target !== document.getElementById('info-button')) {
+      if (popup.style.display === 'flex' && e.target !== document.getElementById('info-button') && !roundCompleted) {
         popup.style.display = 'none';
         startTime = Date.now();
         timerInterval = setInterval(updateTimer, 1000);

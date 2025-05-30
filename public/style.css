@@ -14,6 +14,10 @@ body {
 
 #initial-screen, #round-start-page, #game-page, #round-complete-page, #policy-page {
   background: black;
+  background-image: url('Images/AllHeroes.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
   height: 100%;
   width: 100%;
   display: flex;
@@ -50,7 +54,7 @@ body {
   display: flex;
   flex-direction: column;
   background-image: url('Images/AllHeroes.png');
-  background-size: 375px 667px;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   height: 100%;
@@ -60,13 +64,13 @@ body {
 
 #warning-content {
   width: 75%;
-  background: black;
+  background: rgba(0, 0, 0, 0.8);
   color: white;
   text-align: center;
   padding: 10px;
   border-radius: 10px;
   position: absolute;
-  top: 50%;
+  top: 70%;
   transform: translateY(-50%);
   left: 0;
   right: 0;
@@ -92,7 +96,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   position: absolute;
-  top: calc(70% + 60px); /* Positioned directly below #instruction-box (70% height + 50px margin-top + 10px buffer) */
+  top: calc(70% + 60px);
 }
 
 #button-container-index2 {
@@ -172,7 +176,7 @@ body {
   display: flex;
   flex-direction: column;
   background-image: url('Images/AllHeroes.png');
-  background-size: 375px 667px;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
 }
@@ -196,6 +200,11 @@ body {
   justify-content: flex-start;
   align-items: center;
   position: relative;
+}
+
+#game-page #instruction-box .example-content {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 20px;
 }
 
 #round-complete-page {
@@ -278,9 +287,32 @@ body {
   position: relative;
 }
 
+.content-container {
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.instruction-container {
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#instruction-box .example-content {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 20px;
+  color: black;
+  margin: 10px 0;
+  text-align: center;
+}
+
 #instruction-box p {
   color: black;
-  font-size: 1em;
+  font-size: 1.125em;
   margin: 10px 0;
 }
 
@@ -288,10 +320,10 @@ body {
   color: black;
   font-size: 1em;
   margin: 10px 0;
-  padding-left: 0;
+  padding-left: 10;
   text-wrap: wrap;
   width: 100%;
-  margin-right: 0;
+  margin-right: 10px;
   margin-top: 5px;
   left: 0px;
   display: flex;
