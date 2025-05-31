@@ -1,17 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { Server } = require('socket.io'); // Add Socket.IO for real-time communication
+const { Server } = require('socket.io');
 require('dotenv').config();
 
+mongoose.set('strictQuery', true);
+
 const app = express();
-const server = require('http').createServer(app); // Create HTTP server for Socket.IO
-const io = new Server(server); // Initialize Socket.IO
+const server = require('http').createServer(app);
+const io = new Server(server);
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname + '/public')); // Serve static files from a 'public' directory
+app.use(express.static(__dirname + '/public'));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -123,7 +125,7 @@ const responseSchema = new mongoose.Schema({
     device: String,
     timestamp: Date
   },
-  currentRound: { type: Number, default: 1 } // Track the current round
+  currentRound: { type: Number, default: 1 }
 });
 
 const Response = mongoose.model('Response', responseSchema);
@@ -135,13 +137,15 @@ io.on('connection', (socket) => {
   socket.on('joinGame', async ({ userCode }) => {
     const responseData = await Response.findOne({ userCode });
     const currentRound = responseData ? responseData.currentRound || 1 : 1;
-    socket.join(userCode); // Join a room based on userCode
+    socket.join(userCode);
     socket.emit('gameState', { currentRound });
     console.log(`User ${userCode} joined, current round: ${currentRound}`);
   });
 
   socket.on('submitResponse', async ({ userCode, decisions, policyChecks, ipAddress, browser, device, timestamp, round }) => {
     console.log(`Received submitResponse for user ${userCode}, round ${round}`);
+    console.log('Decisions:', decisions);
+    console.log('PolicyChecks:', policyChecks);
     try {
       if (!userCode || !round) throw new Error('Missing userCode or round');
 
@@ -158,8 +162,8 @@ io.on('connection', (socket) => {
         timestamp
       };
 
-      // Check if this is the last submission for the round (e.g., all decisions submitted)
-      const isRoundComplete = decisions.length > 0 && policyChecks.length > 0; // Adjust condition based on your game logic
+      const isRoundComplete = decisions.length > 0 && policyChecks.length > 0;
+      console.log(`Is Round ${round} complete? ${isRoundComplete} (Decisions: ${decisions.length}, PolicyChecks: ${policyChecks.length})`);
       if (isRoundComplete && round < 6) {
         responseData.currentRound = round + 1;
         await responseData.save();
