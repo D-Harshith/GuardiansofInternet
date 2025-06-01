@@ -11,7 +11,10 @@ const server = require('http').createServer(app);
 const io = new Server(server);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://guardiansofinternet.onrender.com',
+  methods: ['GET', 'POST']
+}));
 app.use(express.json());
 app.use(express.static(__dirname + '/public'));
 
@@ -162,7 +165,7 @@ io.on('connection', (socket) => {
         timestamp
       };
 
-      const isRoundComplete = decisions.length > 0 && policyChecks.length > 0;
+      const isRoundComplete = decisions.length > 0 || policyChecks.length > 0; // Adjusted to allow either decisions or policy checks
       console.log(`Is Round ${round} complete? ${isRoundComplete} (Decisions: ${decisions.length}, PolicyChecks: ${policyChecks.length})`);
       if (isRoundComplete && round < 6) {
         responseData.currentRound = round + 1;

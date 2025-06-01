@@ -190,6 +190,20 @@
       startRound();
     });
 
+    socket.on('startNextRound', (data) => {
+      console.log(`Starting round ${data.currentRound} at ${new Date().toISOString()}`);
+      round = data.currentRound;
+      cardIndex = 0;
+      cardsLeft = 20;
+      timeLeft = 60;
+      roundCompleted = false;
+      decisions = [];
+      policyChecks = [];
+      document.getElementById('card-count').textContent = cardsLeft;
+      document.getElementById('status').textContent = `Starting Round ${round}`;
+      startRound();
+    });
+
     socket.on('responseSaved', (data) => {
       console.log('Response saved:', data.message, 'Current Round:', data.currentRound);
       document.getElementById('status').textContent = data.message;
@@ -241,8 +255,6 @@
             timestamp: new Date().toISOString(),
             round
           });
-          const nextRound = round + 1;
-          window.location.href = `round-complete.html?round=${round}${nextRound > 6 ? '&end=true' : ''}`;
         }).catch(error => {
           console.error('Save error before redirect:', error);
         });
@@ -250,22 +262,20 @@
     }
 
     async function saveResponses() {
-      const userResponse = {
-        userCode,
-        decisions,
-        policyChecks,
-        ipAddress: '127.0.0.1',
-        browser: navigator.userAgent,
-        device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-        timestamp: new Date().toISOString(),
-        round
-      };
-      console.log('Preparing to send:', userResponse);
       try {
         const response = await fetch('https://guardiansofinternet.onrender.com/save-response', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(userResponse)
+          body: JSON.stringify({
+            userCode,
+            decisions,
+            policyChecks,
+            ipAddress: '127.0.0.1',
+            browser: navigator.userAgent,
+            device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+            timestamp: new Date().toISOString(),
+            round
+          })
         });
         console.log('Fetch response status:', response.status, response.statusText);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -309,8 +319,6 @@
             timestamp: new Date().toISOString(),
             round
           });
-          const nextRound = round + 1;
-          window.location.href = `round-complete.html?round=${round}${nextRound > 6 ? '&end=true' : ''}`;
         }).catch(error => {
           console.error('Save error after decision:', error);
         });
