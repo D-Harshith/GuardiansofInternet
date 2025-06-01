@@ -244,7 +244,23 @@
       if ((timeLeft <= 0 || cardIndex >= 20) && !roundCompleted) {
         clearInterval(timerInterval);
         roundCompleted = true;
-        saveResponses().then(() => {
+        if (decisions.length > 0 || policyChecks.length > 0) {
+          saveResponses().then(() => {
+            socket.emit('submitResponse', {
+              userCode,
+              decisions,
+              policyChecks,
+              ipAddress: '127.0.0.1',
+              browser: navigator.userAgent,
+              device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+              timestamp: new Date().toISOString(),
+              round
+            });
+          }).catch(error => {
+            console.error('Save error before redirect:', error);
+          });
+        } else {
+          console.log('No decisions or policy checks recorded, forcing round completion.');
           socket.emit('submitResponse', {
             userCode,
             decisions,
@@ -255,9 +271,7 @@
             timestamp: new Date().toISOString(),
             round
           });
-        }).catch(error => {
-          console.error('Save error before redirect:', error);
-        });
+        }
       }
     }
 
@@ -308,7 +322,23 @@
       } else {
         clearInterval(timerInterval);
         roundCompleted = true;
-        saveResponses().then(() => {
+        if (decisions.length > 0 || policyChecks.length > 0) {
+          saveResponses().then(() => {
+            socket.emit('submitResponse', {
+              userCode,
+              decisions,
+              policyChecks,
+              ipAddress: '127.0.0.1',
+              browser: navigator.userAgent,
+              device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+              timestamp: new Date().toISOString(),
+              round
+            });
+          }).catch(error => {
+            console.error('Save error after decision:', error);
+          });
+        } else {
+          console.log('No decisions or policy checks recorded, forcing round completion.');
           socket.emit('submitResponse', {
             userCode,
             decisions,
@@ -319,9 +349,7 @@
             timestamp: new Date().toISOString(),
             round
           });
-        }).catch(error => {
-          console.error('Save error after decision:', error);
-        });
+        }
       }
     }
 
