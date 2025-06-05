@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
   <div id="game-page">
@@ -171,6 +172,9 @@
     let roundCompleted = false;
     let decisionTimestamps = []; // Track timestamps for each decision
 
+    // Initialize Socket.IO
+    const socket = io('http://localhost:3000');
+
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -181,6 +185,7 @@
 
     function startRound() {
       if (roundCompleted) return;
+      socket.emit('joinGame', { userCode });
       shuffledCards = shuffle(cards.filter(card => !decisions.some(d => d.card === card))).slice(0, 20);
       cardIndex = 0;
       cardsLeft = 20;
@@ -260,36 +265,32 @@
         });
     }
 
-    async function saveResponses() {
-      const userResponse = {
-        userCode,
-        decisions,
-        policyChecks,
-        ipAddress: '127.0.0.1',
-        browser: navigator.userAgent,
-        device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-        timestamp: new Date().toISOString(),
-        round
-      };
+    function saveResponses() {
+      return new Promise((resolve, reject) => {
+        const responseData = {
+          userCode,
+          decisions,
+          policyChecks,
+          ipAddress: '127.0.0.1',
+          browser: navigator.userAgent,
+          device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+          timestamp: new Date().toISOString(),
+          round
+        };
 
-      console.log('Preparing to send:', userResponse);
-      try {
-        const response = await fetch('http://localhost:3000/save-response', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(userResponse)
+        console.log('Submitting response:', responseData);
+        socket.emit('submitResponse', responseData, (response) => {
+          if (response && response.error) {
+            console.error('Socket error:', response.error);
+            reject(new Error(response.error));
+          } else {
+            console.log('Response saved:', response);
+            decisions = [];
+            policyChecks = [];
+            resolve();
+          }
         });
-        console.log('Fetch response status:', response.status, response.statusText);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        console.log('Server response:', data);
-        // Clear decisions and policyChecks for the next round
-        decisions = [];
-        policyChecks = [];
-      } catch (error) {
-        console.error('Fetch error:', error.message);
-        throw error;
-      }
+      });
     }
 
     function recordDecision(decision) {
