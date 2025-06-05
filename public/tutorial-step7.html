@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tutorial Step 7</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .instruction-container i {
+      font-family: 'Times New Roman', Times, serif;
+    }
+    .example-content {
+      font-family: Arial, sans-serif;
+    }
+  </style>
 </head>
 <body>
   <div id="tutorial-step6-page">
@@ -16,7 +24,7 @@
     </div>
     <div id="instruction-box">
       <div class="content-container">
-        <p class="example-content">Migrants are lazy and just want to come here to feed off our social welfare benefits.</p>
+        <p>Migrants are lazy and just want to come here to feed off our social welfare benefits.</p>
       </div>
       <div class="instruction-container">
         <p></p>
@@ -42,7 +50,7 @@
       const instructionBox = document.getElementById('instruction-box');
       instructionBox.innerHTML = `
         <div class="content-container">
-          <p class="example-content">Migrants are lazy and just want to come here to feed off our social welfare benefits.</p>
+          <p>Migrants are lazy and just want to come here to feed off our social welfare benefits.</p>
         </div>
         <div class="instruction-container">
           <p><i>You are correct. This content should be allowed because it is not necessarily attacking a group of people on the basis of their protected characteristics.</i></p>
@@ -56,7 +64,7 @@
       const instructionBox = document.getElementById('instruction-box');
       instructionBox.innerHTML = `
         <div class="content-container">
-          <p class="example-content">Migrants are lazy and just want to come here to feed off our social welfare benefits.</p>
+          <p>Migrants are lazy and just want to come here to feed off our social welfare benefits.</p>
         </div>
         <div class="instruction-container">
           <p><i>This content should be allowed because it is not necessarily attacking a group of people on the basis of their protected characteristics.</i></p>

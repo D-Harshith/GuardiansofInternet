@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About - Guardians of the Internet</title>
   <link rel="stylesheet" href="style.css">
+  <style>#button-container-index2 {
+      width: 23%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      bottom: 80px;
+    } 
+    #main-page {
+      background-color: gold;
+    }
+    </style>
 </head>
 <body>
   <div id="about-page">
@@ -14,6 +26,15 @@
     <div id="about-content">
       <p>Guardians of the Internet is a game designed by Virginia Tech researchers (IRB-23-1147) to examine the choices and tradeoffs involved in content moderation. The decisions you make in this game are anonymous. For more information, see <a href="path/to/IRB-23-1147_Information_sheet.pdf" target="_blank">click here</a>.</p>
     </div>
-  </div>
+    <div id="button-container-index2"
+    style="display: flex; justify-content: center; margin-top: 20px;">
+      
+     <button id="main-page" class="button">Main Page</button>
+    </div>
+  <script>
+    document.getElementById('main-page').addEventListener('click', () => {
+      window.location.href = 'index2.html';
+    });
+  </script>
 </body>
 </html>

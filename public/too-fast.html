@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Too Fast</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="too-fast-page">
+    <div id="top-text">
+      <h1>Too Fast!</h1>
+      <p>You made more than 5 decisions in 3 seconds.</p>
+    </div>
+    <div id="image-container">
+      <img src="Images/Rabbit.webp" alt="Rabbit" class="message-image">
+    </div>
+    <div id="button-container-index2">
+      <button id="main-page" class="button">Main Page</button>
+    </div>
+  </div>
+  <script>
+    document.getElementById('main-page').addEventListener('click', () => {
+      window.location.href = 'index2.html';
+    });
+  </script>
+</body>
+</html>

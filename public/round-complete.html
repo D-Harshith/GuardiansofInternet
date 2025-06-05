@@ -7,49 +7,61 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="round-complete">
-    <h1>Round <span id="round-number"></span> Complete</h1>
-    <p id="message"></p>
+  <div id="round-complete-page">
+    <div id="completion-content"></div>
   </div>
-  <script src="/socket.io/socket.io.js"></script>
   <script>
-    const userCode = localStorage.getItem('userCode');
-    const params = new URLSearchParams(window.location.search);
-    const round = parseInt(params.get('round'));
-    const isEnd = params.get('end') === 'true';
+    // Parse the round number from the URL query string
+    const urlParams = new URLSearchParams(window.location.search);
+    let round = parseInt(urlParams.get('round')) || 1; // Default to 1 if not provided
 
-    document.getElementById('round-number').textContent = round;
-    if (isEnd) {
-      document.getElementById('message').textContent = 'Game Over! Thank you for playing.';
-    } else {
-      document.getElementById('message').textContent = 'Waiting for the next round...';
-    }
+    // Define hero images for each round
+    const heroImages = ['Hero2.png', 'Hero3.png', 'Hero4.png', 'Hero5.png', 'Hero6.png', 'Hero7.png'];
 
-    const socket = io('https://guardiansofinternet.onrender.com');
+    // Define texts for each round
+    const roundTexts = [      "ROUND 1 COMPLETED",     
+    "Ready to help shape a healthy online community for all?",   "Can we count on you to protect the Internet?",       "Are you ready to support an online space that works for everyone?",      "Ready to support a fair digital world?",       "Ready to foster a balanced Internet?"    ];
 
-    socket.on('connect', () => {
-      console.log('Connected to Socket.IO server on Render from round-complete');
-      socket.emit('joinGame', { userCode });
-    });
+    // Set initial completion screen
+    const completionContent = document.getElementById('completion-content');
+    completionContent.innerHTML = `
+      <div style="height: 70%; margin-top: 50px; display: flex; justify-content: center; align-items: center;">
+        <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+      </div>
+      <div style="height: 30%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h1>ROUND ${round} COMPLETED</h1>
+      </div>
+    `;
 
-    socket.on('connect_error', (error) => {
-      console.error('Socket.IO connection error:', error.message);
-      document.getElementById('message').textContent = 'Failed to connect: ' + error.message;
-    });
-
-    socket.on('startNextRound', (data) => {
-      console.log(`Starting round ${data.currentRound} at ${new Date().toISOString()}`);
-      if (!isEnd) {
-        setTimeout(() => {
-          window.location.href = `game.html?round=${data.currentRound}`;
-        }, 3000);
+    // Transition after 3 seconds
+    setTimeout(() => {
+      if (round < 6) {
+        completionContent.innerHTML = `
+          <div style="height: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h1>${roundTexts[round]}</h1>
+          </div>
+          <div style="height: 70%; display: flex; justify-content: center; align-items: center;">
+            <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+          </div>
+          <div style="height: 10%; display: flex; justify-content: center; align-items: center;">
+            <button id="next-round" class="button" style="background-color: orange; margin-top: 10px;">Next Round</button>
+          </div>
+        `;
+        document.getElementById('next-round').addEventListener('click', () => {
+          window.location.href = `round-start.html?round=${round + 1}`;
+        });
+      } else {
+        completionContent.innerHTML = `
+          <div style="height: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h1>Thank you for playing the game, your responses are recorded</h1>
+          </div>
+          <div style="height: 70%; display: flex; justify-content: center; align-items: center;">
+            <img src="Images/${heroImages[round - 1]}" alt="Hero ${round}" style="max-width: 100%; max-height: 100%;">
+          </div>
+          <div style="height: 10%;"></div>
+        `;
       }
-    });
-
-    socket.on('error', (data) => {
-      console.error('Server error:', data.message);
-      document.getElementById('message').textContent = 'Error: ' + data.message;
-    });
+    }, 3000);
   </script>
 </body>
 </html>

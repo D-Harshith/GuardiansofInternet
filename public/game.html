@@ -29,16 +29,14 @@
         <p><b>Hate speech:</b> Content that attacks people on the basis of their protected characteristics</p>
       </div>
     </div>
-    <p id="status"></p>
   </div>
-  <script src="/socket.io/socket.io.js"></script>
   <script>
+    // Persist userCode across rounds using localStorage
     let userCode = localStorage.getItem('userCode');
     if (!userCode) {
       userCode = 'USER_' + Math.random().toString(36).substr(2, 9);
       localStorage.setItem('userCode', userCode);
     }
-    console.log('Generated userCode:', userCode);
     let round = parseInt(new URLSearchParams(window.location.search).get('round')) || 1;
     let cardIndex = 0;
     let cardsLeft = 20;
@@ -171,48 +169,7 @@
     let policyChecks = [];
     let timerInterval;
     let roundCompleted = false;
-
-    const socket = io('https://guardiansofinternet.onrender.com');
-
-    socket.on('connect', () => {
-      console.log('Connected to Socket.IO server on Render');
-      socket.emit('joinGame', { userCode });
-    });
-
-    socket.on('connect_error', (error) => {
-      console.error('Socket.IO connection error:', error.message);
-      document.getElementById('status').textContent = 'Failed to connect: ' + error.message;
-    });
-
-    socket.on('gameState', (data) => {
-      console.log(`Game state updated to round ${data.currentRound}`);
-      round = data.currentRound;
-      startRound();
-    });
-
-    socket.on('startNextRound', (data) => {
-      console.log(`Starting round ${data.currentRound} at ${new Date().toISOString()}`);
-      round = data.currentRound;
-      cardIndex = 0;
-      cardsLeft = 20;
-      timeLeft = 60;
-      roundCompleted = false;
-      decisions = [];
-      policyChecks = [];
-      document.getElementById('card-count').textContent = cardsLeft;
-      document.getElementById('status').textContent = `Starting Round ${round}`;
-      startRound();
-    });
-
-    socket.on('responseSaved', (data) => {
-      console.log('Response saved:', data.message, 'Current Round:', data.currentRound);
-      document.getElementById('status').textContent = data.message;
-    });
-
-    socket.on('error', (data) => {
-      console.error('Server error:', data.message);
-      document.getElementById('status').textContent = 'Error: ' + data.message;
-    });
+    let decisionTimestamps = []; // Track timestamps for each decision
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -232,6 +189,7 @@
       document.getElementById('card-content').textContent = shuffledCards[cardIndex] || 'No more cards';
       document.getElementById('timer-bar').style.width = '100%';
       startTime = Date.now();
+      decisionTimestamps = []; // Reset timestamps
       timerInterval = setInterval(updateTimer, 1000);
       roundCompleted = false;
     }
@@ -244,57 +202,88 @@
       if ((timeLeft <= 0 || cardIndex >= 20) && !roundCompleted) {
         clearInterval(timerInterval);
         roundCompleted = true;
-        if (decisions.length > 0 || policyChecks.length > 0) {
-          saveResponses().then(() => {
-            socket.emit('submitResponse', {
-              userCode,
-              decisions,
-              policyChecks,
-              ipAddress: '127.0.0.1',
-              browser: navigator.userAgent,
-              device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-              timestamp: new Date().toISOString(),
-              round
-            });
-          }).catch(error => {
-            console.error('Save error before redirect:', error);
-          });
-        } else {
-          console.log('No decisions or policy checks recorded, forcing round completion.');
-          socket.emit('submitResponse', {
-            userCode,
-            decisions,
-            policyChecks,
-            ipAddress: '127.0.0.1',
-            browser: navigator.userAgent,
-            device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-            timestamp: new Date().toISOString(),
-            round
-          });
-        }
+        checkSpeedConditions();
       }
     }
 
+    function checkSpeedConditions() {
+      const decisionCount = decisions.length;
+      console.log(`Round ${round} ended. Decisions made: ${decisionCount}, Timestamps: ${decisionTimestamps}`);
+
+      // Check for "too slow" (fewer than 5 decisions)
+      if (decisionCount < 5) {
+        console.log('Redirecting to too-slow.html due to too few decisions');
+        saveResponses()
+          .then(() => {
+            window.location.href = 'too-slow.html';
+          })
+          .catch(error => {
+            console.error('Save error before redirect to too-slow:', error);
+            window.location.href = 'too-slow.html'; // Redirect even if save fails
+          });
+        return;
+      }
+
+      // Check for "too fast" (more than 5 decisions in 3 seconds)
+      if (decisionCount > 5) {
+        const firstFiveDecisions = decisionTimestamps.slice(0, 5);
+        const lastFiveDecisions = decisionTimestamps.slice(-5);
+        const timeForFirstFive = (firstFiveDecisions.length === 5) ? (firstFiveDecisions[4] - firstFiveDecisions[0]) / 1000 : Infinity;
+        const timeForLastFive = (lastFiveDecisions.length === 5) ? (lastFiveDecisions[4] - lastFiveDecisions[0]) / 1000 : Infinity;
+        console.log(`Time for first 5 decisions: ${timeForFirstFive}s, Time for last 5 decisions: ${timeForLastFive}s`);
+
+        if (timeForFirstFive <= 3 || timeForLastFive <= 3) {
+          console.log('Redirecting to too-fast.html due to too many decisions in 3 seconds');
+          saveResponses()
+            .then(() => {
+              window.location.href = 'too-fast.html';
+            })
+            .catch(error => {
+              console.error('Save error before redirect to too-fast:', error);
+              window.location.href = 'too-fast.html'; // Redirect even if save fails
+            });
+          return;
+        }
+      }
+
+      // Proceed to round complete page if conditions are not met
+      console.log('Redirecting to round-complete.html');
+      saveResponses()
+        .then(() => {
+          const nextRound = round + 1;
+          window.location.href = `round-complete.html?round=${round}${nextRound > 6 ? '&end=true' : ''}`;
+        })
+        .catch(error => {
+          console.error('Save error before redirect to round-complete:', error);
+          const nextRound = round + 1;
+          window.location.href = `round-complete.html?round=${round}${nextRound > 6 ? '&end=true' : ''}`; // Redirect even if save fails
+        });
+    }
+
     async function saveResponses() {
+      const userResponse = {
+        userCode,
+        decisions,
+        policyChecks,
+        ipAddress: '127.0.0.1',
+        browser: navigator.userAgent,
+        device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
+        timestamp: new Date().toISOString(),
+        round
+      };
+
+      console.log('Preparing to send:', userResponse);
       try {
-        const response = await fetch('https://guardiansofinternet.onrender.com/save-response', {
+        const response = await fetch('http://localhost:3000/save-response', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userCode,
-            decisions,
-            policyChecks,
-            ipAddress: '127.0.0.1',
-            browser: navigator.userAgent,
-            device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-            timestamp: new Date().toISOString(),
-            round
-          })
+          body: JSON.stringify(userResponse)
         });
         console.log('Fetch response status:', response.status, response.statusText);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log('Server response:', data);
+        // Clear decisions and policyChecks for the next round
         decisions = [];
         policyChecks = [];
       } catch (error) {
@@ -313,6 +302,7 @@
         timeSpent,
         round
       });
+      decisionTimestamps.push(endTime); // Record timestamp of decision
       cardIndex++;
       cardsLeft--;
       document.getElementById('card-count').textContent = Math.max(0, cardsLeft);
@@ -322,34 +312,7 @@
       } else {
         clearInterval(timerInterval);
         roundCompleted = true;
-        if (decisions.length > 0 || policyChecks.length > 0) {
-          saveResponses().then(() => {
-            socket.emit('submitResponse', {
-              userCode,
-              decisions,
-              policyChecks,
-              ipAddress: '127.0.0.1',
-              browser: navigator.userAgent,
-              device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-              timestamp: new Date().toISOString(),
-              round
-            });
-          }).catch(error => {
-            console.error('Save error after decision:', error);
-          });
-        } else {
-          console.log('No decisions or policy checks recorded, forcing round completion.');
-          socket.emit('submitResponse', {
-            userCode,
-            decisions,
-            policyChecks,
-            ipAddress: '127.0.0.1',
-            browser: navigator.userAgent,
-            device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
-            timestamp: new Date().toISOString(),
-            round
-          });
-        }
+        checkSpeedConditions();
       }
     }
 
