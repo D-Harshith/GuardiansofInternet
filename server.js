@@ -12,7 +12,7 @@ const io = new Server(server);
 
 // Middleware
 app.use(cors({
-  origin: 'https://guardiansofinternet.onrender.com',
+  origin: [process.env.RENDER_EXTERNAL_URL || 'https://guardiansofinternet.onrender.com', 'http://localhost:3000'],
   methods: ['GET', 'POST']
 }));
 app.use(express.json());
@@ -145,7 +145,7 @@ io.on('connection', (socket) => {
     console.log(`User ${userCode} joined, current round: ${currentRound}`);
   });
 
-  socket.on('submitResponse', async ({ userCode, decisions, policyChecks, ipAddress, browser, device, timestamp, round }) => {
+  socket.on('submitResponse', async ({ userCode, decisions, policyChecks, ipAddress, browser, device, timestamp, round }, callback) => {
     console.log(`Received submitResponse for user ${userCode}, round ${round}`);
     console.log('Decisions:', decisions);
     console.log('PolicyChecks:', policyChecks);
@@ -162,10 +162,10 @@ io.on('connection', (socket) => {
         ipAddress,
         browser,
         device,
-        timestamp
+        timestamp: new Date(timestamp)
       };
 
-      const isRoundComplete = decisions.length > 0 || policyChecks.length > 0; // Adjusted to allow either decisions or policy checks
+      const isRoundComplete = decisions.length > 0 || policyChecks.length > 0;
       console.log(`Is Round ${round} complete? ${isRoundComplete} (Decisions: ${decisions.length}, PolicyChecks: ${policyChecks.length})`);
       if (isRoundComplete && round < 6) {
         responseData.currentRound = round + 1;
@@ -177,10 +177,10 @@ io.on('connection', (socket) => {
         console.log(`Saved response for ${userCode}, round ${round}`);
       }
 
-      socket.emit('responseSaved', { message: 'Response saved successfully', currentRound: responseData.currentRound });
+      callback({ message: 'Response saved successfully', currentRound: responseData.currentRound });
     } catch (error) {
       console.error('Error processing submitResponse:', error.message, error.stack);
-      socket.emit('error', { message: 'Error saving response', error: error.message });
+      callback({ error: error.message });
     }
   });
 
@@ -213,7 +213,7 @@ app.post('/save-response', async (req, res) => {
       ipAddress,
       browser,
       device,
-      timestamp
+      timestamp: new Date(timestamp)
     };
 
     await responseData.save();

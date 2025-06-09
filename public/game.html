@@ -173,7 +173,19 @@
     let decisionTimestamps = []; // Track timestamps for each decision
 
     // Initialize Socket.IO
-    const socket = io('http://localhost:3000');
+    const socket = io(window.location.origin); // Use Render URL dynamically
+
+    socket.on('connect', () => {
+      console.log('Connected to Socket.IO server at:', window.location.origin);
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Socket.IO connection error:', error);
+    });
+
+    socket.on('error', (data) => {
+      console.error('Server error:', data.message);
+    });
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -278,8 +290,9 @@
           round
         };
 
-        console.log('Submitting response:', responseData);
+        console.log('Submitting response to:', window.location.origin);
         socket.emit('submitResponse', responseData, (response) => {
+          console.log('Callback received:', response);
           if (response && response.error) {
             console.error('Socket error:', response.error);
             reject(new Error(response.error));
@@ -290,6 +303,11 @@
             resolve();
           }
         });
+
+        setTimeout(() => {
+          console.error('Server response timeout after 5 seconds');
+          reject(new Error('Server response timeout'));
+        }, 5000);
       });
     }
 
