@@ -18,8 +18,18 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static(__dirname + '/public'));
 
+// Health Check Endpoint
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+// Existing routes
+app.get('/', (req, res) => {
+  res.redirect('/index.html');
+});
+
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 5000 })
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('MongoDB connection error:', err));
 
@@ -190,10 +200,6 @@ io.on('connection', (socket) => {
 });
 
 // Routes
-app.get('/', (req, res) => {
-  res.redirect('/index.html');
-});
-
 app.post('/save-response', async (req, res) => {
   console.log('Received POST request with body:', req.body);
   try {
