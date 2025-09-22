@@ -31,7 +31,66 @@
       </div>
     </div>
   </div>
+
+  <!-- IP Address Display Section (Added for dynamic IP fetching) -->
+  <div id="ip-section" style="position: fixed; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 4px; font-size: 12px; z-index: 1000;">
+    <div id="ip-loading" style="display: none;">Loading IP...</div>
+    <div id="ip-display" style="display: none;">
+      IP: <span id="ip-value">Loading...</span>
+    </div>
+    <div id="ip-error" style="display: none; color: red; font-size: 11px;"></div>
+  </div>
+
   <script>
+    // Global variable to store fetched IP
+    let currentUserIP = '127.0.0.1'; // Default fallback
+
+    // IP Fetching Function (Added as extra functionality)
+    async function fetchUserIP() {
+      const loadingEl = document.getElementById('ip-loading');
+      const displayEl = document.getElementById('ip-display');
+      const ipValueEl = document.getElementById('ip-value');
+      const errorEl = document.getElementById('ip-error');
+
+      try {
+        // Show loading state
+        loadingEl.style.display = 'block';
+        displayEl.style.display = 'none';
+        errorEl.style.display = 'none';
+
+        // Fetch IP using ipify API (reliable and free)
+        const response = await fetch('https://api.ipify.org?format=json');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        currentUserIP = data.ip;
+
+        // Update UI with IP address
+        ipValueEl.textContent = currentUserIP;
+        
+        // Hide loading, show success
+        loadingEl.style.display = 'none';
+        displayEl.style.display = 'block';
+
+        console.log('Fetched IP successfully:', currentUserIP);
+
+      } catch (error) {
+        console.error('Error fetching IP address:', error);
+        
+        // Hide loading, show error
+        loadingEl.style.display = 'none';
+        errorEl.style.display = 'block';
+        errorEl.textContent = `IP fetch failed: ${error.message}`;
+        
+        // Keep fallback IP
+        ipValueEl.textContent = currentUserIP;
+        displayEl.style.display = 'block';
+      }
+    }
+
     // Persist userCode across rounds using localStorage
     let userCode = localStorage.getItem('userCode');
     if (!userCode) {
@@ -57,7 +116,7 @@
       "Migrants are so filthy.",
       "Migrants are thieves and robbers.",
       "You are such a Jew.",
-      "He’s gay.",
+      "He's gay.",
       "French are the best.",
       "Keep the horny migrant teenagers away from our daughters.",
       "Muslim migrants ought to be killed.",
@@ -71,7 +130,7 @@
       "Migrants are scum.",
       "The migrant rats have arrived in Berlin.",
       "Migrants are filthy cockroaches that will infect our country.",
-      "Refugees? They’re all rape-fugees!",
+      "Refugees? They're all rape-fugees!",
       "Refugees are state-financed child molesters.",
       "Stop the refugee filth from coming into our country.",
       "I call upon the government to either sterilize the migrants or else keep them out to preserve our racial purity.",
@@ -105,20 +164,20 @@
       "Ew, girls are gross.",
       "Bengalis are vile.",
       "Jews are disgusting.",
-      "I don’t like men.",
+      "I don't like men.",
       "This thread is full of femcel takes.",
-      "I’m racist and proud.",
+      "I'm racist and proud.",
       "Women are bitches.",
       "Asshole Asians.",
       "#fuckthegays",
       "Women drivers should stay the fuck off the road.",
-      "I don’t want Ethiopians in our pool.",
+      "I don't want Ethiopians in our pool.",
       "You towelhead.",
       "Look at the tranny.",
-      "Faggots can’t force me to do anything.",
+      "Faggots can't force me to do anything.",
       "I have Muslims.",
       "Stop the mexicans migrants from coming to this country! #BuildTheWall",
-      "Let’s kill jews and kill them for fun. #KillJews",
+      "Let's kill jews and kill them for fun. #KillJews",
       "Throw all those migrant babies across the border!",
       "Rich people are the best, but really poor people suck.",
       "Using my freedom of speech to inform that I find Palestines DISGUSTING!",
@@ -127,7 +186,7 @@
       "Genocide is happening in Gaza!",
       "Rich people are the worst.",
       "Russian women are mail-order bride scum.",
-      "People with disabilities are subhuman and shouldn’t be see in public.",
+      "People with disabilities are subhuman and shouldn't be see in public.",
       "People with COVID are like rats contaminating everyone around them.",
       "Mormons should be punished.",
       "I don't like men.",
@@ -139,20 +198,20 @@
       "Fuck.",
       "Bitch.",
       "Omg this Karen really called the cops because kids were playing music?",
-      "She’s out here saying ‘I’m not like other girls’... classic pick-me behavior.",
+      "She's out here saying 'I'm not like other girls'... classic pick-me behavior.",
       "Bro just repeats whatever the news says. Full-on NPC.",
       "Here come the alphabet mafia trying to cancel jokes again.",
       "Imagine still using Facebook unironically in 2025. OK boomer.",
       "Landwhale energy.",
-      "She said she’s an IG model but girl is built like a fridge.",
-      "Wait that’s a dude?? That’s a clean trap damn.",
-      "She’s got the body but her face... total butterface situation.",
+      "She said she's an IG model but girl is built like a fridge.",
+      "Wait that's a dude?? That's a clean trap damn.",
+      "She's got the body but her face... total butterface situation.",
       "This party looks mad ghetto, not showing up.",
       "Figures, another thug looting a store. Typical.",
       "Ching chong.",
       "Why are we giving benefits to illegals when our own people are struggling?",
-      "This mayo monkey really said seasoning is ‘too spicy’.",
-      "Another snow roach opinion I didn’t ask for.",
+      "This mayo monkey really said seasoning is 'too spicy'.",
+      "Another snow roach opinion I didn't ask for.",
       "You are schizo.",
       "Ultimate cringe.",
       "You are retarded.",
@@ -160,7 +219,7 @@
       "This post screams femcel energy tbh.",
       "Let me guess... 5'6 incel mad at women again?",
       "This soyboy probably apologizes when his girl cheats.",
-      "Dude’s a cuck and proud of it apparently.",
+      "Dude's a cuck and proud of it apparently.",
       "You are such a welfare queen.",
       "You are so cringe. Bless your heart.",
       "Cringeeeee."
@@ -283,7 +342,7 @@
           userCode,
           decisions,
           policyChecks,
-          ipAddress: '127.0.0.1',
+          ipAddress: currentUserIP, // Updated to use dynamically fetched IP
           browser: navigator.userAgent,
           device: /Mobile|Android|iOS/.test(navigator.userAgent) ? 'Mobile' : 'Desktop',
           timestamp: new Date().toISOString(),
@@ -291,6 +350,7 @@
         };
 
         console.log('Submitting response to:', window.location.origin);
+        console.log('Using IP Address:', currentUserIP); // Debug log
         socket.emit('submitResponse', responseData, (response) => {
           console.log('Callback received:', response);
           if (response && response.error) {
@@ -319,7 +379,8 @@
         card: shuffledCards[cardIndex],
         decision,
         timeSpent,
-        round
+        round,
+        ipAddress: currentUserIP // Include IP with each decision
       });
       decisionTimestamps.push(endTime); // Record timestamp of decision
       cardIndex++;
@@ -335,6 +396,7 @@
       }
     }
 
+    // Event Listeners
     document.getElementById('allow').addEventListener('click', () => recordDecision('allow'));
     document.getElementById('not-allow').addEventListener('click', () => recordDecision('not allow'));
 
@@ -343,7 +405,12 @@
       if (popup.style.display === 'none' && !roundCompleted) {
         clearInterval(timerInterval);
         popup.style.display = 'flex';
-        policyChecks.push({ card: shuffledCards[cardIndex], round, time: Date.now() });
+        policyChecks.push({ 
+          card: shuffledCards[cardIndex], 
+          round, 
+          time: Date.now(),
+          ipAddress: currentUserIP // Include IP with policy checks
+        });
       } else {
         popup.style.display = 'none';
         startTime = Date.now();
@@ -360,7 +427,20 @@
       }
     });
 
-    startRound();
+    // Initialize - Fetch IP first, then start the game
+    document.addEventListener('DOMContentLoaded', function() {
+      // Fetch IP address immediately
+      fetchUserIP()
+        .then(() => {
+          // Start the game after IP is fetched (or fallback is set)
+          startRound();
+        })
+        .catch(error => {
+          console.error('IP fetch failed, starting game with fallback IP:', error);
+          // Start game even if IP fetch fails
+          startRound();
+        });
+    });
   </script>
 </body>
 </html>
