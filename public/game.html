@@ -32,32 +32,13 @@
     </div>
   </div>
 
-  <!-- IP Address Display Section (Added for dynamic IP fetching) -->
-  <div id="ip-section" style="position: fixed; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 4px; font-size: 12px; z-index: 1000;">
-    <div id="ip-loading" style="display: none;">Loading IP...</div>
-    <div id="ip-display" style="display: none;">
-      IP: <span id="ip-value">Loading...</span>
-    </div>
-    <div id="ip-error" style="display: none; color: red; font-size: 11px;"></div>
-  </div>
-
   <script>
     // Global variable to store fetched IP
     let currentUserIP = '127.0.0.1'; // Default fallback
 
     // IP Fetching Function (Added as extra functionality)
     async function fetchUserIP() {
-      const loadingEl = document.getElementById('ip-loading');
-      const displayEl = document.getElementById('ip-display');
-      const ipValueEl = document.getElementById('ip-value');
-      const errorEl = document.getElementById('ip-error');
-
       try {
-        // Show loading state
-        loadingEl.style.display = 'block';
-        displayEl.style.display = 'none';
-        errorEl.style.display = 'none';
-
         // Fetch IP using ipify API (reliable and free)
         const response = await fetch('https://api.ipify.org?format=json');
         
@@ -68,26 +49,12 @@
         const data = await response.json();
         currentUserIP = data.ip;
 
-        // Update UI with IP address
-        ipValueEl.textContent = currentUserIP;
-        
-        // Hide loading, show success
-        loadingEl.style.display = 'none';
-        displayEl.style.display = 'block';
-
         console.log('Fetched IP successfully:', currentUserIP);
 
       } catch (error) {
         console.error('Error fetching IP address:', error);
         
-        // Hide loading, show error
-        loadingEl.style.display = 'none';
-        errorEl.style.display = 'block';
-        errorEl.textContent = `IP fetch failed: ${error.message}`;
-        
         // Keep fallback IP
-        ipValueEl.textContent = currentUserIP;
-        displayEl.style.display = 'block';
       }
     }
 
@@ -110,7 +77,7 @@
       "Build a fence in Macedonia to keep the migrants out.",
       "Asylum seekers out.",
       "Islam is a religion of hate. Close the borders to immigrating Muslims until we figure out what is going on.",
-      "Mexican immigrants are freeloaders mooching off of tax dollars we don’t even have.",
+      "Mexican immigrants are freeloaders mooching off of tax dollars we don't even have.",
       "Immigrants just mooch off the state, that's why we need to keep them out.",
       "Migrants are lazy and just want to come here to feed off our social welfare benefits.",
       "Migrants are so filthy.",
